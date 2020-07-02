@@ -1,6 +1,6 @@
 SHELL=/usr/bin/env bash
 
-.PHONY: execute execute_delay print_png print_dot print test build cargo_help help
+.PHONY: execute execute_delay print_png print_dot print test build pdf cargo_help help
 
 execute: ## Execute a randomly generated DAG
 	cargo run -- -m execute -x 50 -n 40 -p 40 -d
@@ -22,6 +22,9 @@ test:  ## Run all unit tests, takes roughly 30 seconds total
 
 build:  ## Build executable
 	cargo build
+
+pdf: ## Make README into a pdf
+	pandoc README.md -s -o README.pdf
 
 cargo_help:  ## Show executable help
 	cargo run -- --help

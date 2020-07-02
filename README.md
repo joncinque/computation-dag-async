@@ -72,6 +72,8 @@ make print
 
 An example graph is provided at `example.png`.
 
+![Example DAG](example.png)
+
 NOTE: `dot` takes a long time for anything over 50 nodes, so be sure to stay
 underneath that threshold.
 
@@ -149,8 +151,12 @@ To create and execute a random DAG, run:
 make execute
 ```
 
-This will print out the DAG and order of processing, including which thread
+This will print out the DAG and when a node is processed, including which thread
 eventually executed the node.
+
+Additionally, you can modify the number of threads in the `tokio` runtime by
+modifying the number of `core_threads` at `#[tokio::main(core_threads = 8)]`
+in `main.rs`.
 
 ## Part 3: Order of execution
 
