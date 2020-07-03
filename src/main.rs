@@ -33,6 +33,11 @@ struct Opt {
     /// but will show simultaneous execution
     #[structopt(long)]
     delay: bool,
+
+    /// Force DAG functions to be "default", will always result in 0 as a response,
+    /// but allows for tests with huge trees.
+    #[structopt(long)]
+    default: bool,
 }
 
 #[tokio::main(core_threads = 8)]
@@ -44,6 +49,9 @@ async fn main() {
     let default_operation = if opt.delay {
         let operation_type = OperationType::Delay;
         Some(Operation { operation_type })
+    } else if opt.default {
+        let operation_type = OperationType::Default;
+        Some(Operation { operation_type })
     } else {
         None
     };
@@ -52,18 +60,17 @@ async fn main() {
     };
     let mut rng = thread_rng();
     let dag: Dag = rng.sample(distribution);
-    if opt.debug {
-        println!("{}", dag.dot());
-    }
     match opt.mode.as_str() {
         "print" => {
-            if !opt.debug {
-                println!("{}", dag.dot());
-            }
+            println!("{}", dag.dot());
         },
         "execute" => {
+            if opt.debug {
+                println!("{}", dag.dot());
+            }
             let computation = Computation::new(&dag, opt.debug);
-            let results = computation.process(1).await;
+            let initial: u128 = 1;
+            let results = computation.process(initial).await;
             println!("Results: {:?}", results);
         },
         _ => panic!("Unknown mode"),

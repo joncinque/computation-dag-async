@@ -244,7 +244,8 @@ mod test {
         let ids = (0..100_000).map(|_| dag.add_node(operation.clone(), vec![])).collect();
         dag.add_node(operation.clone(), ids);
         let computation = Computation::new(&dag, false);
-        let results = computation.process(1).await;
+        let initial: u128 = 1;
+        let results = computation.process(initial).await;
         assert_eq!(results, vec![100_000]);
     }
 }

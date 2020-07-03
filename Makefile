@@ -1,11 +1,14 @@
 SHELL=/usr/bin/env bash
 
-.PHONY: execute execute_delay print_png print_dot print test build pdf cargo_help help
+.PHONY: execute execute_delay execute_huge print_png print_dot print test build pdf cargo_help help
 
-execute: ## Execute a randomly generated DAG
+execute: ## Execute a random DAG
 	cargo run -- -m execute -x 50 -n 40 -p 40 -d
 
-execute_delay:  ## Execute a smaller DAG with two-second delays at each level
+execute_huge: ## Execute a huge random DAG (~60 seconds, depending on connections)
+	cargo run -- -m execute -x 10001 -n 10000 -p 20 --default
+
+execute_delay:  ## Execute a small random DAG with two-second delays at each level
 	cargo run -- -m execute -x 8 -n 5 -p 40 -d --delay
 
 print_png:   ## Print random DAG in png format using dot
@@ -15,9 +18,9 @@ print_dot:   ## Print default random DAG in dot format
 	cargo run -- -m print | dot
 
 print:       ## Print random DAG in dot format with command-line flags
-	cargo run -- -m print -x 20 -n 15 -p 20 -d | dot
+	cargo run -- -m print -x 20 -n 15 -p 20 | dot
 
-test:  ## Run all unit tests, takes roughly 30 seconds total
+test:  ## Run all unit tests (~30 seconds)
 	cargo test
 
 build:  ## Build executable

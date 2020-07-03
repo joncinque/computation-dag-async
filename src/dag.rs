@@ -46,9 +46,13 @@ impl Dag {
     pub fn dot(&self) -> String {
         let mut dot = "digraph {\n".to_owned();
         self.nodes.iter().for_each(|(parent_id, node)| {
-            node.children.iter().for_each(|child_id| {
-                dot += &format!("  {} -> {};\n", parent_id, child_id);
-            });
+            if node.children.len() == 0 {
+                dot += &format!("  {};\n", parent_id);
+            } else {
+                node.children.iter().for_each(|child_id| {
+                    dot += &format!("  {} -> {};\n", parent_id, child_id);
+                });
+            }
         });
         dot += "}";
         dot
